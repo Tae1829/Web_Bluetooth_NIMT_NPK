@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>NPK Soil Probe</title>
+<meta name="description" content="Web Bluetooth readout for the Intronics NIMT NPK soil probe.">
+<meta name="theme-color" content="#0d7280" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0b1114" media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+
+<header class="mast">
+  <div class="mast-row">
+    <div>
+      <p class="eyebrow">Intronics NIMT</p>
+      <h1>NPK Soil Probe</h1>
+    </div>
+    <p class="status" id="status" data-state="disconnected" role="status" aria-live="polite">
+      <span class="dot" aria-hidden="true"></span><span id="statusText">Not connected</span>
+    </p>
+  </div>
+  <p class="device" id="device" hidden></p>
+</header>
+
+<main>
+
+  <div class="actions">
+    <button type="button" id="connect" class="btn primary">Connect to a probe</button>
+    <button type="button" id="reconnect" class="btn" hidden>Reconnect</button>
+    <button type="button" id="disconnect" class="btn" hidden>Disconnect</button>
+  </div>
+
+  <div id="banners" class="banners"></div>
+
+  <section class="readings" id="readings" aria-label="Probe readings"></section>
+
+  <p class="freshness" id="freshness" hidden></p>
+
+  <details class="help">
+    <summary>The probe isn't in the list</summary>
+    <p>Three reasons, all normal, none of them a fault:</p>
+    <ol>
+      <li><strong>Bluetooth is switched off on the probe.</strong> The setting lives in the probe's own web app and it persists. Units ship with it enabled.</li>
+      <li><strong>The provisioning access point is open.</strong> WiFi and Bluetooth share one 2.4&nbsp;GHz radio, so advertising stops while the AP is up — for up to ten minutes, or until the operator closes it.</li>
+      <li><strong>Something else is already connected.</strong> The probe accepts one connection at a time and stops advertising while it holds it, so it goes <em>absent</em> from the list rather than appearing as busy.</li>
+    </ol>
+    <p>Close any phone app that might be holding the connection, then try again.</p>
+  </details>
+
+  <details class="help">
+    <summary>Using an iPhone or iPad</summary>
+    <p>
+      Safari has no Web Bluetooth, and Chrome and Edge on iOS are Safari underneath, so
+      none of them can reach the probe — they will not even offer to try.
+      <strong>Bluefy</strong>, from the App Store, is a browser that adds Web Bluetooth on
+      iOS. Open this same address in it and everything works as it does on Android.
+    </p>
+    <p>
+      Because Bluefy is not Safari, iOS will not let you add this page to the home screen
+      from it. Bookmark it inside Bluefy instead, and check before going out that it still
+      opens with the phone off the network.
+    </p>
+  </details>
+
+</main>
+
+<footer>
+  <p>
+    Read-only. Nothing in this app can change the probe — configuration, WiFi credentials
+    and calibration are reachable only from the probe's own web app.
+  </p>
+  <p class="foot-row">
+    <button type="button" id="demo" class="linkish">Demo mode</button>
+    <span class="sep" aria-hidden="true">·</span>
+    <span id="build" class="dim"></span>
+  </p>
+</footer>
+
+<template id="cardTemplate">
+  <article class="card" data-state="idle">
+    <h2 class="card-label"></h2>
+    <p class="card-value"><span class="v">—</span><span class="u"></span></p>
+    <p class="card-note"></p>
+  </article>
+</template>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

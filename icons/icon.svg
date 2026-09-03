@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="NPK soil probe">
+  <rect width="512" height="512" rx="112" fill="#0d7280"/>
+  <!-- soil line -->
+  <rect x="96" y="286" width="320" height="10" rx="5" fill="#7fd3dd" opacity=".55"/>
+  <!-- three nutrient bars: N, P, K -->
+  <rect x="150" y="150" width="34" height="136" rx="17" fill="#ffffff"/>
+  <rect x="239" y="118" width="34" height="168" rx="17" fill="#ffffff"/>
+  <rect x="328" y="182" width="34" height="104" rx="17" fill="#ffffff"/>
+  <!-- probe stem and tip below the soil line -->
+  <rect x="239" y="296" width="34" height="86" rx="17" fill="#ffffff" opacity=".85"/>
+  <path d="M256 420 L232 372 h48 Z" fill="#ffffff" opacity=".85"/>
+</svg>

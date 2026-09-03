@@ -1,0 +1,187 @@
+/* NPK Soil Probe — field readout.
+ * Designed for a phone held at arm's length in daylight: big numbers, high
+ * contrast, tap targets that survive gloves. */
+
+:root{
+  --ground:#f2f5f5; --surface:#ffffff; --sunk:#e9eeee;
+  --ink:#111a1e; --muted:#56676f; --faint:#7d8f97;
+  --rule:#d8e0e0; --rule-strong:#b9c6c7;
+  --accent:#0d7280; --accent-ink:#ffffff; --accent-soft:#e0f0f1;
+  --caution:#8a5200; --caution-soft:#fbf0dd; --caution-rule:#d9a441;
+  --bad:#a33636; --bad-soft:#fbebeb;
+  --live:#1c6b4a;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#0b1114; --surface:#111a1e; --sunk:#0e1619;
+    --ink:#e4ecee; --muted:#93a6ad; --faint:#75878e;
+    --rule:#202e33; --rule-strong:#31444a;
+    --accent:#41c3d4; --accent-ink:#04191d; --accent-soft:#0e2b30;
+    --caution:#e0b060; --caution-soft:#241d10; --caution-rule:#a97c2f;
+    --bad:#e07a7a; --bad-soft:#261414;
+    --live:#4bbd8a;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0b1114; --surface:#111a1e; --sunk:#0e1619;
+  --ink:#e4ecee; --muted:#93a6ad; --faint:#75878e;
+  --rule:#202e33; --rule-strong:#31444a;
+  --accent:#41c3d4; --accent-ink:#04191d; --accent-soft:#0e2b30;
+  --caution:#e0b060; --caution-soft:#241d10; --caution-rule:#a97c2f;
+  --bad:#e07a7a; --bad-soft:#261414;
+  --live:#4bbd8a;
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font:400 16px/1.6 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  -webkit-font-smoothing:antialiased;
+  padding:0 env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+/* ---------- masthead ---------- */
+.mast{
+  max-width:860px; margin:0 auto; padding:26px 20px 18px;
+  border-bottom:1px solid var(--rule-strong);
+}
+.mast-row{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.eyebrow{
+  margin:0 0 4px; font:500 11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--accent);
+}
+h1{margin:0;font-size:clamp(23px,5vw,30px);line-height:1.15;letter-spacing:-.015em}
+.status{
+  display:inline-flex; align-items:center; gap:8px; margin:2px 0 0;
+  font:500 13px/1 ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:.03em;
+  padding:8px 11px; border:1px solid var(--rule-strong); border-radius:999px;
+  background:var(--surface); white-space:nowrap;
+}
+.status .dot{width:8px;height:8px;border-radius:50%;background:var(--faint);flex:none}
+.status[data-state="connected"]{border-color:var(--live);color:var(--live)}
+.status[data-state="connected"] .dot{background:var(--live)}
+.status[data-state="connecting"]{border-color:var(--caution-rule);color:var(--caution)}
+.status[data-state="connecting"] .dot{background:var(--caution-rule);animation:pulse 1.1s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.25}}
+.device{
+  margin:12px 0 0; font:500 14px/1 ui-monospace,SFMono-Regular,Menlo,monospace;
+  color:var(--muted); letter-spacing:.04em;
+}
+
+main{max-width:860px;margin:0 auto;padding:22px 20px 8px}
+
+/* ---------- buttons ---------- */
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 18px}
+.btn{
+  font:600 16px/1 inherit; padding:15px 22px; min-height:50px;
+  border:1px solid var(--rule-strong); border-radius:6px;
+  background:var(--surface); color:var(--ink); cursor:pointer;
+  transition:background .15s,border-color .15s;
+}
+.btn:hover{border-color:var(--accent)}
+.btn:active{transform:translateY(1px)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{filter:brightness(1.07)}
+.btn[disabled]{opacity:.5;cursor:not-allowed;transform:none}
+.btn:focus-visible,.linkish:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.linkish{
+  background:none;border:0;padding:0;font:inherit;color:var(--accent);
+  cursor:pointer;text-decoration:underline;text-underline-offset:3px;
+}
+
+/* ---------- banners ---------- */
+.banners:not(:empty){margin:0 0 18px;display:grid;gap:10px}
+.banner{
+  border-left:3px solid var(--caution-rule); background:var(--caution-soft);
+  padding:14px 16px; border-radius:0 4px 4px 0;
+}
+.banner.bad{border-left-color:var(--bad);background:var(--bad-soft)}
+.banner.info{border-left-color:var(--accent);background:var(--accent-soft)}
+.banner h3{margin:0 0 5px;font-size:14px;font-weight:700;color:var(--caution)}
+.banner.bad h3{color:var(--bad)}
+.banner.info h3{color:var(--accent)}
+.banner p{margin:0;font-size:14.5px;line-height:1.55;max-width:62ch}
+.banner p+p{margin-top:8px}
+.banner .acts{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.banner .act{
+  display:inline-flex; align-items:center; justify-content:center;
+  font:600 14px/1 inherit; padding:12px 18px; min-height:44px;
+  border:1px solid currentColor; border-radius:5px;
+  background:none; color:inherit; cursor:pointer; text-decoration:none;
+}
+/* The filled button needs a real colour pair, not currentColor — setting both
+ * background and color from currentColor makes them the same colour. */
+.banner .act.primary{background:var(--caution);border-color:var(--caution);color:var(--caution-soft)}
+.banner.info .act.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.banner.bad .act.primary{background:var(--bad);border-color:var(--bad);color:var(--bad-soft)}
+.banner .act:hover{background:color-mix(in srgb,currentColor 12%,transparent)}
+.banner .act.primary:hover{filter:brightness(1.1)}
+.banner .act[disabled]{opacity:.65;cursor:default;background:none}
+.banner .act:focus-visible{outline:2px solid currentColor;outline-offset:2px}
+.banner .fine{margin-top:11px;font-size:13px;opacity:.85}
+.banner .fine a{color:inherit}
+
+/* ---------- reading cards ---------- */
+/* Two columns even on a narrow phone: a technician wants all six readings in
+ * one glance, not a scroll. */
+.readings{
+  display:grid; gap:12px;
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,158px),1fr));
+}
+.card{
+  background:var(--surface); border:1px solid var(--rule); border-radius:8px;
+  padding:14px 16px 13px; min-height:104px;
+  display:flex; flex-direction:column; justify-content:space-between;
+}
+@media (min-width:560px){
+  .readings{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+  .card{padding:16px 18px 15px;min-height:118px}
+}
+.card-label{
+  margin:0 0 8px; font:500 11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;
+  letter-spacing:.11em; text-transform:uppercase; color:var(--faint);
+}
+.card-value{margin:0;display:flex;align-items:baseline;gap:7px;flex-wrap:wrap}
+.card-value .v{
+  font:600 clamp(30px,7vw,40px)/1 ui-sans-serif,system-ui,sans-serif;
+  letter-spacing:-.02em; font-variant-numeric:tabular-nums;
+}
+.card-value .u{font-size:15px;color:var(--muted);font-weight:500}
+.card-note{margin:8px 0 0;font-size:12.5px;line-height:1.4;color:var(--faint);min-height:1.4em}
+
+.card[data-state="idle"] .v{color:var(--faint)}
+.card[data-state="unknown"]{border-color:var(--caution-rule);background:var(--caution-soft)}
+/* "No reading" is two words where the others are four characters, so it needs
+ * its own size or it overflows a half-width card on a phone. */
+.card[data-state="unknown"] .v{color:var(--caution);font-size:clamp(19px,4.8vw,26px)}
+.card[data-state="unknown"] .u{display:none}
+.card[data-state="unknown"] .card-note{color:var(--caution)}
+.card[data-state="out-of-range"]{border-color:var(--bad)}
+.card[data-state="out-of-range"] .v{color:var(--bad)}
+.card[data-state="out-of-range"] .card-note{color:var(--bad)}
+
+.freshness{
+  margin:16px 0 0; font:400 13px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;
+  color:var(--faint);
+}
+
+/* ---------- help ---------- */
+.help{margin:26px 0 0;border-top:1px solid var(--rule);padding-top:16px}
+.help summary{cursor:pointer;font-weight:600;font-size:15px;padding:4px 0}
+.help p,.help li{font-size:14.5px;color:var(--muted);max-width:64ch}
+.help ol{padding-left:22px}
+.help li{margin-bottom:9px}
+
+/* ---------- footer ---------- */
+footer{
+  max-width:860px;margin:32px auto 0;padding:20px 20px 40px;
+  border-top:1px solid var(--rule); color:var(--muted); font-size:13.5px;
+}
+footer p{margin:0 0 10px;max-width:66ch;line-height:1.55}
+.foot-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.sep{color:var(--rule-strong)}
+.dim{color:var(--faint);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}

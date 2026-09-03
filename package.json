@@ -1,0 +1,11 @@
+{
+  "name": "npk-probe-web-bluetooth",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Web Bluetooth client for the Intronics NIMT NPK soil probe. No dependencies, no build step.",
+  "type": "module",
+  "scripts": {
+    "test": "node test/decode.test.mjs",
+    "serve": "python -m http.server 8000"
+  }
+}

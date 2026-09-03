@@ -1,0 +1,19 @@
+{
+  "name": "NPK Soil Probe",
+  "short_name": "NPK Probe",
+  "description": "Web Bluetooth readout for the Intronics NIMT NPK soil probe.",
+  "id": "/npk-probe/",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f2f5f5",
+  "theme_color": "#0d7280",
+  "categories": ["utilities", "productivity"],
+  "icons": [
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml" },
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
